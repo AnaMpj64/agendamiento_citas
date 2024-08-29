@@ -1,0 +1,230 @@
+
+
+.menu-barpad {
+  background-color: transparent;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  border-radius: 30px;
+  box-shadow: 0 0 20px rgba(255, 0, 179, 0.5); /* Resplandor difuminado */
+  max-width: 800px;
+  width: 70%;
+  margin: 0 auto; /* Centra horizontalmente */
+  bottom: 25px;
+  position: absolute; /* Para asegurar que se posicione correctamente */
+  left: 60%; /* Posición absoluta centrada */
+  transform: translateX(-50%); /* Ajusta la posición para centrar en relación con el contenedor */
+}
+
+.menu-itemo {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  color: rgb(245, 1, 172);
+  transition: all 0.3s ease;
+}
+
+.menu-itemo:hover {
+  transform: scale(1.1);
+}
+
+.selected {
+  color: rgb(255, 255, 255);
+  border-radius: 30px;
+  background-color: rgba(255, 0, 179, 0.5);
+  box-shadow: 0 0 20px rgba(255, 0, 179, 0.8);
+}
+
+.panels {
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 0, 179, 0.5);
+  background-color: #fff;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-group label {
+  color: #333; /* Cambia el color de las etiquetas */
+  font-size: 18px; /* Ajusta el tamaño de fuente de las etiquetas */
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc; /* Agrega un borde a los campos de entrada */
+  border-radius: 5px;
+  font-size: 16px; /* Ajusta el tamaño de fuente de los campos de entrada */
+}
+
+/* Cambia los colores de fondo y texto para los campos de entrada en foco */
+.form-group input:focus,
+.form-group textarea:focus {
+  background-color: #f0f0f0;
+  border: 1px solid #999;
+}
+
+button[type="submit"] {
+  background-color: #007bff; /* Cambia el color de fondo del botón */
+  color: #fff; /* Cambia el color del texto del botón */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3; /* Cambia el color de fondo en hover */
+}
+
+.formulario-paciente {
+  width: 70%;
+  margin: 0 auto; /* Centra horizontalmente */
+  bottom: 25px;
+  position: absolute; /* Para asegurar que se posicione correctamente */
+  right: 5%; 
+  height: 650px; /* Altura máxima deseada para el div */
+  overflow: auto; /* Agregar barra de desplazamiento cuando sea necesario */
+
+}
+
+.tabla-todos-pacientes {
+  height: 50%; /* Altura máxima deseada para el div */
+  overflow: auto; /* Agregar barra de desplazamiento cuando sea necesario */
+
+}
+
+.table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table.table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  max-width: 70%;
+  background-color: transparent;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(64, 124, 135, 0.1); /* Cambia el color al pasar el cursor */
+}
+
+.table thead th {
+  background-color: #407C87;
+  color: #fff;
+  border-bottom: 2px solid #ddd;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.table tbody td {
+  padding: 10px;
+  font-size: 14px;
+  border-top: 1px solid #ddd;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.table-row {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.table-row:hover {
+  background-color: rgba(255, 0, 179, 0.1); /* Color de fondo cuando el cursor pasa por encima */
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.text-light {
+  color: #f8f9fa !important;
+}
+
+/* Estilos para la barra de desplazamiento */
+.formulario-paciente::-webkit-scrollbar {
+  width: 10px; /* Ancho de la barra de desplazamiento */
+}
+
+.formulario-paciente::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color del pulgar de la barra de desplazamiento */
+  border-radius: 5px; /* Bordes redondeados para el pulgar */
+}
+
+.formulario-paciente::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Color del pulgar de la barra de desplazamiento al pasar el mouse */
+}
+
+.formulario-paciente::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color de fondo de la pista de la barra de desplazamiento */
+}
+
+.container-fluid {
+  margin-left: 250px; /* El ancho de la navbar */
+  padding: 0 15px;
+  width: calc(100% - 250px); /* Ajusta el ancho para compensar el margen izquierdo */
+}
+
+#modalActualizarHistorial .modal-content {
+  border-radius: 10px;
+  width: 700px;
+}
+
+#modalActualizarHistorial .modal-header {
+  background-color: #407C87; /* Color de fondo de la cabecera */
+  color: #fff; /* Color del texto de la cabecera */
+  border-bottom: none; /* Borde inferior */
+}
+
+#modalActualizarHistorial .modal-body {
+  padding: 20px; /* Espaciado interior del cuerpo del modal */
+}
+
+#modalActualizarHistorial .modal-footer {
+  border-top: none; /* Borde superior del pie de página */
+  text-align: right; /* Alinear el contenido del pie de página a la derecha */
+}
+
+/* Estilos para el botón de cerrar */
+#modalActualizarHistorial .modal-header .close {
+  background-color: transparent;
+  border:none;
+  color: #fff; /* Color del icono de cierre */
+  font-size: 28px; /* Tamaño del icono de cierre */
+  opacity: 1; /* Opacidad del icono de cierre (completamente visible) */
+  padding: 10px; /* Espaciado interior del icono de cierre */
+}
+
+#modalActualizarHistorial .modal-header .close:hover {
+  opacity: 0.7; /* Opacidad al pasar el mouse por encima del icono de cierre */
+}
+
+@media (max-width: 1200px) {
+  .menu-barpad {
+    width: 80%; /* Ajusta el ancho para pantallas medianas */
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-barpad {
+    width: 90%; /* Ajusta el ancho para pantallas pequeñas */
+  }
+}
+
+@media (max-width: 576px) {
+  .menu-barpad {
+    width: 95%; /* Ajusta el ancho para pantallas muy pequeñas */
+    flex-direction: column; /* Cambia la dirección del flexbox a columna para mejor visualización en pantallas pequeñas */
+    height: auto; /* Ajusta la altura según el contenido */
+    padding: 10px 0; /* Añade un poco de padding vertical */
+  }
+}

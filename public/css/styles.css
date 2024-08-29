@@ -1,0 +1,230 @@
+body {
+  font-family: Arial, sans-serif;
+}
+ /* Estilos para la barra de menú */
+ .navbar {
+  background-color: #407C87;
+  text-align: center;
+  color: white;
+  padding: 10px 0;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: white;
+  margin: 0 20px; 
+}
+
+.dropdown-menu {
+  background-color: #a5dbdd; /* Color de fondo del menú */
+  border: none; /* Quita el borde del menú */
+}
+
+#calendar-container {
+    max-height: 400px;
+    overflow-y: auto; 
+  }
+
+  .fc-event {
+    cursor: pointer;
+  }
+
+  #cards-citas {
+    max-height: 80vh; /* Establece la altura máxima del contenedor */
+    overflow-y: auto; 
+}
+
+
+#cards-citas::-webkit-scrollbar {
+  width: 12px;
+}
+
+#cards-citas::-webkit-scrollbar-track {
+  background-color: #f1f1f1; 
+}
+
+#cards-citas::-webkit-scrollbar-thumb {
+  background-color: #888; 
+  border-radius: 6px; 
+}
+
+#cards-citas::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.sidenav {
+  position: fixed;
+  top: 58px;
+  bottom: 0;
+  left: 0;
+  width: 250px;
+  margin: 16px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #407C87;
+  color: white;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column; /* Añade una disposición de columna para el contenido */
+  justify-content: space-between; /* Distribuye el contenido en el espacio vertical */
+}
+
+.sidenav-header {
+  padding: 15px;
+}
+
+.user-profile {
+  text-align: center;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.user-name {
+  margin-top: 10px;
+}
+
+.sidenav-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-item {
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link i {
+  margin-right: 10px;
+}
+
+.sidenav-footer {
+  padding: 10px 15px;
+  margin-top: auto;
+}
+
+.btn-outline-danger {
+  color: #d3e1e2;
+  border-color: #d3e1e2;
+}
+
+.btn-outline-danger:hover {
+  background-color: transparent;
+  color: white;
+}
+
+.panel {
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.panel-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.panel-header h3 {
+  font-size: 24px;
+  color: #333;
+}
+
+.panel-content p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.panel-footer {
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+  padding-top: 10px;
+  text-align: center;
+}
+
+.btn {
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px;
+}
+
+.btn-cancel {
+  background-color: #ff5858;
+  color: #fff;
+}
+
+.btn-confirm {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.btn-completed {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.panelo {
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.custom-file-label::after {
+    content: '+';
+    font-size: 40px;
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: transparent; /* Fondo transparente */
+    color: #000; /* Color del texto */
+    box-shadow: 2px 3px 5px 1px rgba(255, 0, 255, 0.559); /* Sombra oscura */
+    padding: 40px; /* Espaciado interno del botón */
+    cursor: pointer; /* Cambia el cursor al puntero al pasar por encima */
+}
+
+/* Cambiar el color del borde del botón cuando se enfoca */
+.custom-file-label:hover::after,
+.custom-file-input:focus ~ .custom-file-label::after {
+    border-color: #007bff; /* Cambia el color del borde al azul al enfocar */
+}
+
+/* Cambiar el color del borde del botón cuando se hace clic */
+.custom-file-input:active ~ .custom-file-label::after {
+    border-color: #0056b3; /* Cambia el color del borde al azul oscuro al hacer clic */
+}
+
+.custom-file-input{
+  display: none;
+}
+
+#nombre,
+.custom-file {
+  display: inline-block;
+  vertical-align: top; /* Alinea los elementos en la parte superior */
+  margin-right: 10px; /* Agrega un margen derecho para separarlos */
+}
+
+#nombre {
+  margin-left: 130px;
+  max-width: 830px;
+}
+
+
+

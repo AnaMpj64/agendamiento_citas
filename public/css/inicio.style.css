@@ -1,0 +1,109 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Encabezado */
+.welcome-section {
+    background-image: url('../img/slider.png');
+    color: #fff;
+    padding: 60px;
+    text-align: center;
+}
+
+.welcome-section h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.welcome-section p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* CSS para los botones de avance y retroceso */
+.slider-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.slider-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(3px);
+    font-size: 24px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin: 0 10px;
+
+}
+
+.slider-button:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Cambio de color al pasar el mouse */
+}
+
+/* Tarjetas de servicios */
+.services-section {
+    margin-top: 40px;
+}
+
+.card {
+    background-color: #fff;
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.card img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card p {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #666;
+}
+
+/* Pie de página */
+.footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+    .welcome-section {
+        padding: 40px;
+    }
+
+    .welcome-section h1 {
+        font-size: 28px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card h3 {
+        font-size: 20px;
+    }
+
+    .card p {
+        font-size: 14px;
+    }
+}

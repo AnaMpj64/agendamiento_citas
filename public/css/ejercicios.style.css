@@ -1,0 +1,68 @@
+.fondo-container1 {
+  background-image: url('../../public/img/fondo_ejercicios.png');
+  background-size: contain; /* Asegura que toda la imagen se muestre */
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+}
+
+.fondo-container2 {
+  background-image: url('../../public/img/fondo_ejercicios.png');
+  background-size: contain; /* Asegura que toda la imagen se muestre */
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+}
+
+.container {
+  background-size: contain; /* Asegura que toda la imagen se muestre */
+  background-position: center;
+  height: 80vh;
+  width: 120vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+  
+  /* Estilos para el card */
+  .card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+    border: 3px solid #eeeeee;
+    border-radius: 20px;
+    padding: 50px;
+    padding-left: 100px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    max-width: 80%;
+    height: 60vh;
+    left: 150px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Estilos para la imagen */
+  .image {
+    height: 40vh;
+    width: auto;
+    max-width: 40vh;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 40px;
+    left: 0;
+    z-index: 2;
+  }
+  
+  /* Estilos para el título */
+  .title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilos para el texto */
+  .text {
+    text-align: justify;
+  }
+  

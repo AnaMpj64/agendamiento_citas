@@ -1,0 +1,64 @@
+body {
+    background-color: #d3e1e2;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 13px 12px 0px rgb(5 105 95 / 20%);
+    background-color: #fff;
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para el calendario */
+#calendar {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el mensaje de descripción */
+.description {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    background-color: #f7f7f7;
+}
+
+/* Estilos para los días no laborables */
+.fc-day-disabled {
+    background-color: #eee;
+    color: #999;
+}
+
+/* Estilos para el modal */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el botón de agendar en el modal */
+.btn-agendar {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.btn-agendar:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para el mensaje de error */
+.swal2-popup {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+}

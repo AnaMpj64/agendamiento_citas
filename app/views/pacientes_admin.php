@@ -55,7 +55,7 @@
 </body>
 </html>
 
-<!---------Modal------------------>
+<!---------Modal Actualización Historial Paciente------------------>
 <div class="modal fade" id="modalActualizarHistorial" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <form id="historialForm" action="../controllers/pacientes/nuevo_historial.php" method="post">
@@ -72,17 +72,57 @@
           </button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="paciente_id" name="paciente_id"> <!-- Agrega el atributo 'name' para enviar el valor -->
+          <input type="hidden" id="paciente_id" name="paciente_id"> <!-- ID del paciente -->
+          
+          <!-- Campo Diagnóstico -->
           <div class="md-form form-lg">
             <i class="fas fa-diagnoses prefix"></i>
-            <label for="diagnostico">Diagnóstico</label>
+            <label for="diagnostico">Motivo de consulta</label>
             <textarea type="text" id="diagnostico" name="diagnostico" class="md-textarea form-control"></textarea>
           </div>
+          </br>
+          
+          <!-- Campo Recomendación -->
           <div class="md-form form-lg">
             <i class="fas fa-stethoscope prefix"></i>
-            <label for="recomendacion">Recomendación</label>
+            <label for="recomendacion">Recomendación o describa notas de evolución</label>
             <textarea type="text" id="recomendacion" name="recomendacion" class="md-textarea form-control"></textarea>
           </div>
+          </br>
+          
+          <!-- Campo Resultados (opcional) -->
+          <div class="md-form form-lg">
+            <i class="fas fa-vials prefix"></i>
+            <label for="resultados">Resultados (Opcional - sólo si se envió examen)</label>
+            <textarea type="text" id="resultados" name="resultados" class="md-textarea form-control"></textarea>
+          </div>
+          </br>
+          
+          <!-- Campo Servicio Brindado -->
+          <div class="md-form form-lg">
+            <i class="fas fa-user-md prefix"></i>
+            <label for="servicio">Servicio Brindado</label>
+                        <select class="form-control" id="txt_servicio" name="txt_servicio" required>
+                            <option value="Consulta">Consulta</option>
+                            <option value="Terapia de electroestimulación">Terapia de electroestimulación</option>
+                            <option value="Tratamiento quiropráctico">Tratamiento quiropráctico</option>
+                            <option value="Rehabilitación">Rehabilitación</option>
+                            <option value="Tratamientos para dolores específicos">Tratamientos para dolores específicos</option>
+                        </select>
+          </div>
+          </br>
+          
+          <!-- Lista desplegable de Profesionales -->
+          <div class="md-form form-lg">
+            <i class="fas fa-user-nurse prefix"></i>
+            <label for="profesional">Profesional Asignado</label>
+            <select class="form-control" id="txt_profesional" name="txt_profesional" required>
+              <!-- Aquí se cargará la lista de profesionales desde el archivo JS -->
+            </select>
+          </div>
+          </br>
+          
+          <!-- Botón Guardar -->
           <div class="text-center mt-4 mb-2">
             <button type="submit" class="btn btn-primary">Guardar
               <i class="fas fa-save ml-2"></i>

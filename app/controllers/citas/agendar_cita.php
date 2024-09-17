@@ -8,7 +8,8 @@ $result=$objp->agendar(
     $_POST['txt_fecha_cita'],
     $_POST['txt_hora_cita'],
     $_POST['txt_servicio'],
-    $_POST['txt_paciente_id']);
+    $_POST['txt_paciente_id'],
+    $_POST['txt_profesional']);
 if($result)
 {
     echo '<script>jQuery(function(){swal({

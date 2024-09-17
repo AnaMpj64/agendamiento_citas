@@ -63,6 +63,12 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Escoja un profesional (puede dejarlo en blanco):</label>
+                        <select class="form-control" id="txt_profesional" name="txt_profesional">
+
+                        </select>
+                    </div>   
+                    <div class="mb-3">
                         <input type="hidden" class="form-control" id="txt_paciente_id" name="txt_paciente_id" value="<?php echo $paciente_id ?>" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Agendar</button>

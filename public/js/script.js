@@ -1,23 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
+  var horasLibres = [];  // Almacena las horas libres deshabilitadas
+
   var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'timeGridWeek',
       locale: 'es',
       businessHours: [
           {
-              daysOfWeek: [1, 2, 3, 4, 5], // Días laborables
-              startTime: '08:00', // Hora de inicio
-              endTime: '12:59',   // Hora de finalización antes del descanso
+              daysOfWeek: [1, 2, 3, 4, 5],
+              startTime: '08:00',
+              endTime: '12:59',
           },
           {
-              daysOfWeek: [1, 2, 3, 4, 5], // Días laborables
-              startTime: '14:01', // Hora de inicio después del descanso
-              endTime: '18:00',   // Hora de finalización
+              daysOfWeek: [1, 2, 3, 4, 5],
+              startTime: '14:01',
+              endTime: '18:00',
           },
           {
-              daysOfWeek: [6], // Días laborables
-              startTime: '09:00', // Hora de inicio después del descanso
-              endTime: '13:00',   // Hora de finalización
+              daysOfWeek: [6],
+              startTime: '09:00',
+              endTime: '13:00',
           }
       ],
       slotMinTime: "08:00:00",
@@ -26,55 +28,68 @@ document.addEventListener('DOMContentLoaded', function() {
       slotLabelFormat: {
           hour: 'numeric',
           minute: '2-digit',
-          omitZeroMinute: false, // Esto evita que las etiquetas omitan los minutos en 0
-          meridiem: 'short' // Agrega "am" o "pm" después de la hora
+          omitZeroMinute: false,
+          meridiem: 'short'
       },
 
-      slotDuration: '01:00:00', // Establece la duración de la ranura en 1 hora
-      slotLabelInterval: '01:00:00', // Establece el intervalo de las etiquetas de ranura en 1 hora
-      snapDuration: '01:00:00', // Establece la duración del "acoplamiento" en 1 hora para evitar intervalos de media hora      
+      slotDuration: '01:00:00',
+      slotLabelInterval: '01:00:00',
+      snapDuration: '01:00:00',
 
       dateClick: function(info) {
-          var diaSemana = info.date.getDay();
+          var fechaSeleccionada = info.dateStr.split('T')[0];  // Obtener solo la fecha
+          var horaCompleta = info.dateStr.split('T')[1];       // Obtener la hora completa con segundos
+          var horaSeleccionada = horaCompleta.split(':')[0] + ':' + horaCompleta.split(':')[1];  // Formato HH:MM
 
-          // Dividir la fecha y la hora
-          var fechaSeleccionada = info.dateStr.split('T')[0]; // Obtener la parte de la fecha
-          var horaCompleta = info.dateStr.split('T')[1]; // Obtener la parte de la hora completa (con zona horaria)
-          var horaSeleccionada = horaCompleta.split(':')[0]; // Obtener la hora
-          var minutosSeleccionados = horaCompleta.split(':')[1]; // Obtener los minutos
+          // Verificar si la hora seleccionada está en las horas libres
+          var horaLibreEncontrada = horasLibres.some(function(horaLibre) {
+              var horaLibreFormateada = horaLibre.hora.split(':')[0] + ':' + horaLibre.hora.split(':')[1]; // Formatear la hora de la hora libre a HH:MM
+              return horaLibre.fecha === fechaSeleccionada && horaLibreFormateada === horaSeleccionada;
+          });
+          cargarPersonalModal();
+
+          if (horaLibreEncontrada) {
+              // Mostrar el mensaje si la hora está bloqueada
+              Swal.fire({
+                  title: 'Esta hora no está disponible para citas.',
+                  width: 600,
+                  padding: '3em',
+                  color: '#716add',
+                  background: '#fff',
+                  backdrop: `
+                      rgba(0,0,123,0.4)
+                      url("../../public/img/giphy.gif")
+                      left top
+                      no-repeat
+                  `
+              });
+              return; // Salir de la función
+          }
 
           // Obtener la fecha y hora actual
           var ahora = new Date();
-          var fechaActual = ahora.toISOString().split('T')[0]; // Obtener la fecha actual
-          var horaActual = ahora.getHours(); // Obtener la hora actual
-          var minutosActuales = ahora.getMinutes(); // Obtener los minutos actuales
+          var fechaActual = ahora.toISOString().split('T')[0];
+          var horaActual = ahora.getHours();
+          var minutosActuales = ahora.getMinutes();
 
-          // Comparar la fecha y hora seleccionadas con la actual
-          if (fechaSeleccionada < fechaActual || (fechaSeleccionada === fechaActual && (horaSeleccionada < horaActual || (horaSeleccionada == horaActual && minutosSeleccionados < minutosActuales)))) {
+          if (fechaSeleccionada < fechaActual || (fechaSeleccionada === fechaActual && (horaSeleccionada < horaActual || (horaSeleccionada == horaActual && minutosActuales < minutosActuales)))) {
               Swal.fire({
                   title: 'No se puede agendar en una fecha u hora anterior a la actual.',
                   icon: 'error',
                   confirmButtonText: 'Aceptar'
               });
-              return; // Salir de la función si la fecha u hora es anterior
+              return; 
           }
 
-          // Verificar si la hora seleccionada está dentro de las horas laborables
+          // Verificar si la hora está dentro de las horas laborales
           if (
-              (diaSemana >= 1 && diaSemana <= 5 && ((horaSeleccionada >= '08' && horaSeleccionada < '13') || (horaSeleccionada >= '14' && horaSeleccionada <= '18'))) ||
-              (diaSemana === 6 && horaSeleccionada >= '09' && horaSeleccionada < '13')
+              (info.date.getDay() >= 1 && info.date.getDay() <= 5 && ((horaSeleccionada >= '08:00' && horaSeleccionada < '13:00') || (horaSeleccionada >= '14:01' && horaSeleccionada <= '18:00'))) ||
+              (info.date.getDay() === 6 && (horaSeleccionada >= '09:00' && horaSeleccionada < '13:00'))
           ) {
-              // Formatear la hora y los minutos
-              var horaFormateada = horaSeleccionada + ':' + minutosSeleccionados;
-
-              // Asignar valores a los campos de texto
               document.getElementById('txt_fecha_cita').value = fechaSeleccionada;
-              document.getElementById('txt_hora_cita').value = horaFormateada;
-
-              // Mostrar el modal
+              document.getElementById('txt_hora_cita').value = horaSeleccionada;
               $('#citaModal').modal('show');
           } else {
-              // Fuera de las horas laborables, mostrar un mensaje de error
               Swal.fire({
                   title: 'Esta hora no está disponible para citas.',
                   width: 600,
@@ -91,11 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
           }
       },
 
-      scrollTime: '13:00:00', // Establece el inicio del scroll a la hora de inicio laborable
+      scrollTime: '13:00:00',
 
       events: {
-          url: '../../app/controllers/citas/cargar_citas.php', // Ruta al archivo PHP que obtiene las citas
-          method: 'GET', // Método HTTP para la solicitud
+          url: '../../app/controllers/citas/cargar_citas.php',
+          method: 'GET',
           failure: function () {
               alert('Error al cargar eventos');
           }
@@ -103,6 +118,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
       eventColor: '#a5dbdd',
 
+      // Cargar los días libres y desactivarlos en el calendario
+      eventSources: [
+          {
+              url: '../../app/controllers/horarios/cargar_dias_libres.php',
+              method: 'GET',
+              failure: function() {
+                  console.error('Error al cargar los días libres');
+              },
+              success: function(data) {
+                  let diasLibres = data;
+                  
+                  // Guardar las horas libres en el array horasLibres
+                  diasLibres.forEach(dia => {
+                      horasLibres.push({
+                          fecha: dia.fecha,
+                          hora: dia.hora
+                      });
+
+                      calendar.addEventSource({
+                          events: [
+                              {
+                                  start: dia.fecha + 'T' + dia.hora,
+                                  allDay: false,
+                                  display: 'background',
+                                  overlap: false,
+                                  backgroundColor: '#dee2e6',
+                                  rendering: 'background'
+                              }
+                          ]
+                      });
+                  });
+
+              }
+          }
+      ]
   });
   calendar.render();
 });
@@ -111,128 +161,311 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendario-admin');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendario-admin');
+  var horasLibres = [];  // Array para almacenar las horas libres
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',  // Vista inicial
       locale: 'es',
       headerToolbar: {
-        center: 'timeGridDay,timeGridWeek,dayGridMonth,listYear' // buttons for switching between views
+          center: 'timeGridDay,timeGridWeek,dayGridMonth,listYear' // botones para cambiar entre vistas
       },
       businessHours: [
-        {
-            daysOfWeek: [1, 2, 3, 4, 5], // Días laborables
-            startTime: '08:00', // Hora de inicio
-            endTime: '12:59',   // Hora de finalización antes del descanso
-        },
-        {
-            daysOfWeek: [1, 2, 3, 4, 5], // Días laborables
-            startTime: '14:01', // Hora de inicio después del descanso
-            endTime: '18:00',   // Hora de finalización
-        },
-        {
-            daysOfWeek: [6], // Días laborables
-            startTime: '09:00', // Hora de inicio después del descanso
-            endTime: '13:00',   // Hora de finalización
-        }
-    ],
+          {
+              daysOfWeek: [1, 2, 3, 4, 5], // Días laborables
+              startTime: '08:00',
+              endTime: '12:59',
+          },
+          {
+              daysOfWeek: [1, 2, 3, 4, 5],
+              startTime: '14:01',
+              endTime: '18:00',
+          },
+          {
+              daysOfWeek: [6],
+              startTime: '09:00',
+              endTime: '13:00',
+          }
+      ],
       slotMinTime: "08:00:00",
       slotMaxTime: "18:00:00",
 
       slotLabelFormat: {
-        hour: 'numeric',
-        minute: '2-digit',
-        omitZeroMinute: false, // Esto evita que las etiquetas omitan los minutos en 0
-        meridiem: 'short' // Agrega "am" o "pm" después de la hora
-        },
+          hour: 'numeric',
+          minute: '2-digit',
+          omitZeroMinute: false,
+          meridiem: 'short'
+      },
 
-        slotDuration: '01:00:00', // Establece la duración de la ranura en 1 hora
-        slotLabelInterval: '01:00:00', // Establece el intervalo de las etiquetas de ranura en 1 hora
-        snapDuration: '01:00:00', // Establece la duración del "acoplamiento" en 1 hora para evitar intervalos de media hora      
-      
-        eventClick: function(info) {
+      slotDuration: '01:00:00',
+      slotLabelInterval: '01:00:00',
+      snapDuration: '01:00:00',
 
-          var idCita = info.event.extendedProps.cita_id;          
-          desplegarPanel(idCita);
-          document.getElementById('cita_id_txt').value = idCita;
-         },
+      // Evento de clic en un día u hora del calendario
+      dateClick: function(info) {
+          var fechaSeleccionada = info.dateStr.split('T')[0];  // Obtener la fecha seleccionada
 
-         dateClick: function(info) {
-          var diaSemana = info.date.getDay();
-      
-          // Dividir la fecha y la hora
-          var fechaSeleccionada = info.dateStr.split('T')[0]; // Obtener la parte de la fecha
-          var horaCompleta = info.dateStr.split('T')[1]; // Obtener la parte de la hora completa (con zona horaria)
-          var horaSeleccionada = horaCompleta.split(':')[0]; // Obtener la hora
-          var minutosSeleccionados = horaCompleta.split(':')[1]; // Obtener los minutos
-    
-          // Verificar si la hora seleccionada está dentro de las horas laborables
-          if (
-            (diaSemana >= 1 && diaSemana <= 5 && ((horaSeleccionada >= '08' && horaSeleccionada < '13') || (horaSeleccionada >= '14' && horaSeleccionada <= '18'))) ||
-            (diaSemana === 6 && horaSeleccionada >= '09' && horaSeleccionada < '13')
-          ) {
-            // Formatear la hora y los minutos
-            var horaFormateada = horaSeleccionada + ':' + minutosSeleccionados;
-    
-            // Asignar valores a los campos de texto
-            document.getElementById('txt_fecha_cita').value = fechaSeleccionada;
-            document.getElementById('txt_hora_cita').value = horaFormateada;
-
-            cargarPacientesModal();
-            // Mostrar el modal
-            $('#citaModal').modal('show');
+          // Verificar si la vista actual es mensual
+          if (calendar.view.type === 'dayGridMonth') {
+              // Mostrar alerta para marcar todo el día como no laborable
+              Swal.fire({
+                  title: '¿Estás seguro?',
+                  text: `Estás a punto de marcar todo el día ${fechaSeleccionada} como no laborable. No se podrán agendar citas.`,
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Sí, marcar todo el día',
+                  cancelButtonText: 'Cancelar'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      // Llamar a la función para marcar todo el día como no laborable
+                      marcarDiaCompletoNoLaborable(fechaSeleccionada);
+                  }
+              });
           } else {
-            // Fuera de las horas laborables, no hacer nada o mostrar un mensaje de error
-            // Por ejemplo, puedes mostrar una alerta
-            //Swal.fire('Horario no disponible', 'Esta hora no está disponible para citas.', 'error');
-            Swal.fire({
-              title:'Esta hora no está disponible para citas.',
-              width: 600,
-              padding: '3em',
-              color: '#716add',
-              background: '#fff',
-              backdrop: `
-                rgba(0,0,123,0.4)
-                url("../../public/img/giphy.gif")
-                left top
-                no-repeat
-              `
-            })
-            
+              // Si no es la vista mensual, seguimos permitiendo la selección por hora
+              var horaCompleta = info.dateStr.split('T')[1];       // Obtener la hora completa
+              var horaSeleccionada = horaCompleta.split(':')[0] + ':' + horaCompleta.split(':')[1];  // Formato HH:MM
+
+              console.log("Fecha seleccionada: ", fechaSeleccionada);
+              console.log("Hora seleccionada: ", horaSeleccionada);
+
+              // Verificar si la hora seleccionada está en las horas libres
+              var horaLibreEncontrada = horasLibres.some(function(horaLibre) {
+                  var horaLibreFormateada = horaLibre.hora.split(':')[0] + ':' + horaLibre.hora.split(':')[1]; // Formato HH:MM
+                  return horaLibre.fecha === fechaSeleccionada && horaLibreFormateada === horaSeleccionada;
+              });
+
+              if (horaLibreEncontrada) {
+                  // Mostrar mensaje si es una hora libre
+                  Swal.fire({
+                      title: 'Esta hora no está disponible para citas.',
+                      width: 600,
+                      padding: '3em',
+                      color: '#716add',
+                      background: '#fff',
+                      backdrop: `
+                          rgba(0,0,123,0.4)
+                          url("../../public/img/giphy.gif")
+                          left top
+                          no-repeat
+                      `
+                  });
+                  return; // Salir de la función
+              }
+
+              // Verificar si está dentro de las horas laborales
+              if (
+                  (info.date.getDay() >= 1 && info.date.getDay() <= 5 && ((horaSeleccionada >= '08:00' && horaSeleccionada < '13:00') || (horaSeleccionada >= '14:01' && horaSeleccionada <= '18:00'))) ||
+                  (info.date.getDay() === 6 && (horaSeleccionada >= '09:00' && horaSeleccionada < '13:00'))
+              ) {
+                  // Asignar valores a los campos de texto y abrir el modal
+                  document.getElementById('txt_fecha_cita').value = fechaSeleccionada;
+                  document.getElementById('txt_hora_cita').value = horaSeleccionada;
+                  cargarPacientesModal();
+                  $('#citaModal').modal('show');
+              } else {
+                  // Mostrar mensaje si está fuera de las horas laborales
+                  Swal.fire({
+                      title:'Esta hora no está disponible para citas.',
+                      width: 600,
+                      padding: '3em',
+                      color: '#716add',
+                      background: '#fff',
+                      backdrop: `
+                          rgba(0,0,123,0.4)
+                          url("../../public/img/giphy.gif")
+                          left top
+                          no-repeat
+                      `
+                  });
+              }
           }
-        },
-        
-    scrollTime: '13:00:00', // Establece el inicio del scroll a la hora de inicio laborable
+      },
+
+      // Evento para manejar clic en citas
+      eventClick: function(info) {
+          var idCita = info.event.extendedProps.cita_id;
+
+          // Verificar si el evento tiene un cita_id válido (es una cita agendada)
+          if (idCita !== undefined) {
+              desplegarPanel(idCita);  // Función para cargar el panel lateral
+              document.getElementById('cita_id_txt').value = idCita;
+          } else {
+              // Si no tiene cita_id, mostrar que es un día libre
+              Swal.fire({
+                  title: 'Este es un día libre, no hay datos de citas.',
+                  icon: 'info',
+                  confirmButtonText: 'Aceptar'
+              });
+          }
+      },
+
+      scrollTime: '13:00:00',
 
       events: {
-        url: '../../app/controllers/citas/cargar_citas.php', // Ruta al archivo PHP que obtiene las citas
-        method: 'GET', // Método HTTP para la solicitud
-        failure: function () {
-            alert('Error al cargar eventos');
-        }
-    },
+          url: '../../app/controllers/citas/cargar_citas.php', // Ruta al archivo PHP que obtiene las citas
+          method: 'GET',
+          failure: function () {
+              alert('Error al cargar eventos');
+          }
+      },
 
-    eventDidMount: function(info) {
-      var estadoCita = info.event.extendedProps.estado;
+      eventDidMount: function(info) {
+          var estadoCita = info.event.extendedProps.estado;
 
-      // Definir colores según los estados de la cita
-      var coloresPorEstado = {
-          'En espera de confirmación': 'blue',
-          'Confirmada': 'green',
-          'Cancelada': 'red',
-          'Cumplida': 'gray',
-          'Incumplida': '#EEB100'
-      };
+          // Definir colores según los estados de la cita
+          var coloresPorEstado = {
+              'En espera de confirmación': 'blue',
+              'Confirmada': 'green',
+              'Cancelada': 'red',
+              'Cumplida': 'gray',
+              'Incumplida': '#EEB100'
+          };
 
-      // Establecer el color del evento según el estado
-      info.el.style.backgroundColor = coloresPorEstado[estadoCita] || 'pink';
-  },
+          // Establecer el color del evento según el estado
+          info.el.style.backgroundColor = coloresPorEstado[estadoCita];
+      },
 
+      // Cargar los días libres y desactivarlos en el calendario
+      eventSources: [
+          {
+              url: '../../app/controllers/horarios/cargar_dias_libres.php', // Ruta para cargar los días libres
+              method: 'GET',
+              failure: function() {
+                  console.error('Error al cargar los días libres');
+              },
+              success: function(data) {
+                  console.log(data);
+                  let diasLibres = data;
+                  
+                  // Guardar las horas libres en el array horasLibres
+                  diasLibres.forEach(dia => {
+                      horasLibres.push({
+                          fecha: dia.fecha,
+                          hora: dia.hora
+                      });
 
-    });
-    calendar.render();
+                      calendar.addEventSource({
+                          events: [
+                              {
+                                  start: dia.fecha + 'T' + dia.hora,
+                                  allDay: false,
+                                  display: 'background',
+                                  overlap: false,
+                                  backgroundColor: '#dee2e6',
+                                  rendering: 'background'
+                              }
+                          ]
+                      });
+                  });
+
+                  console.log("Horas libres cargadas: ", horasLibres);
+              }
+          }
+      ]
   });
 
+  calendar.render();
+});
+
+// Función para marcar todo un día como no laborable
+function marcarDiaCompletoNoLaborable(fecha) {
+  var horasLaborables = [];
+
+  // Definir las horas laborables de lunes a viernes
+  for (var i = 8; i <= 18; i++) {
+      if (i !== 13) { // Excluir la hora de almuerzo si corresponde
+          horasLaborables.push((i < 10 ? '0' + i : i) + ':00:00');
+      }
+  }
+
+  // Si es sábado, definir el rango de horas para sábado
+  var dayOfWeek = new Date(fecha).getDay();
+  if (dayOfWeek === 6) {
+      horasLaborables = [];
+      for (var i = 9; i < 13; i++) {
+          horasLaborables.push(i + ':00:00');
+      }
+  }
+
+  // Enviar múltiples solicitudes AJAX para cada hora del día
+  horasLaborables.forEach(function(hora) {
+      $.ajax({
+          url: '../controllers/citas/marcar_no_laborable.php',
+          type: 'POST',
+          data: {
+              txt_fecha_cita: fecha,
+              txt_hora_cita: hora
+          },
+          success: function(response) {
+              console.log(`Hora ${hora} marcada como no laborable`);
+          },
+          error: function() {
+              console.log(`Error al marcar la hora ${hora} como no laborable`);
+          }
+      });
+  });
+
+  // Mostrar mensaje de éxito al final
+  Swal.fire({
+      title: 'Éxito',
+      text: `Todas las horas del día ${fecha} han sido marcadas como no laborables.`,
+      icon: 'success',
+      confirmButtonText: 'Aceptar'
+  }).then(function() {
+      location.reload(); // Recargar la página después de marcar las horas
+  });
+}
+
+// Función para marcar todo un día como no laborable
+function marcarDiaCompletoNoLaborable(fecha) {
+  var horasLaborables = [];
+
+  // Definir las horas laborables de lunes a viernes
+  for (var i = 8; i <= 18; i++) {
+      if (i !== 13) { // Excluir la hora de almuerzo si corresponde
+          horasLaborables.push((i < 10 ? '0' + i : i) + ':00:00');
+      }
+  }
+
+  // Si es sábado, definir el rango de horas para sábado
+  var dayOfWeek = new Date(fecha).getDay();
+  if (dayOfWeek === 6) {
+      horasLaborables = [];
+      for (var i = 9; i < 13; i++) {
+          horasLaborables.push(i + ':00:00');
+      }
+  }
+
+  // Enviar múltiples solicitudes AJAX para cada hora del día
+  horasLaborables.forEach(function(hora) {
+      $.ajax({
+          url: '../../app/controllers/horarios/marcar_no_laborable.php',
+          type: 'POST',
+          data: {
+              txt_fecha_cita: fecha,
+              txt_hora_cita: hora
+          },
+          success: function(response) {
+              console.log(`Hora ${hora} marcada como no laborable`);
+          },
+          error: function() {
+              console.log(`Error al marcar la hora ${hora} como no laborable`);
+          }
+      });
+  });
+
+  // Mostrar mensaje de éxito al final
+  Swal.fire({
+      title: 'Éxito',
+      text: `Todas las horas del día ${fecha} han sido marcadas como no laborables.`,
+      icon: 'success',
+      confirmButtonText: 'Aceptar'
+  }).then(function() {
+      location.reload(); // Recargar la página después de marcar las horas
+  });
+}
 
 
 
@@ -614,5 +847,28 @@ function idPacienteHistorial(idPaciente) {
  
     $("#paciente_id").val(idPaciente);
 
+}
+
+function buscarTabla() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("buscarInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tabla");
+    tr = table.getElementsByTagName("tr");
+
+    // Recorre todas las filas de la tabla y oculta las que no coincidan con el filtro
+    for (i = 1; i < tr.length; i++) { // Empieza en 1 para omitir la fila de encabezado
+        tr[i].style.display = "none";
+        td = tr[i].getElementsByTagName("td");
+        for (var j = 0; j < td.length; j++) {
+            if (td[j]) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break;
+                }
+            }
+        }
+    }
 }
 

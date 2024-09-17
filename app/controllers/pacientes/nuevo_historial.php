@@ -7,7 +7,10 @@ $objp= new historial();
 $result=$objp->nuevoHistorial(
     $_POST['diagnostico'],
     $_POST['recomendacion'],
-    $_POST['paciente_id']);
+    $_POST['paciente_id'],
+    $_POST['resultados'],
+    $_POST['txt_servicio'],
+    $_POST['txt_profesional']);
 if($result)
 {
     echo '<script>jQuery(function(){swal({

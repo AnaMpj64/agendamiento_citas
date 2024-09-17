@@ -22,11 +22,11 @@ class cita{
         $this->paciente_id="";
     }
 
-    public function agendar($fecha_cita, $hora_cita, $servicio, $paciente_id){
+    public function agendar($fecha_cita, $hora_cita, $servicio, $paciente_id, $profesional_id){
 
         $conex=new DBConexion();
         $conex=$conex ->Conectar();
-        $sentencia=sprintf("INSERT INTO citas (FECHA_RESERVA, FECHA_CITA, HORA_CITA, SERVICIO, ESTADO, PACIENTE_ID) values (CURDATE(),'%s','%s','%s','%s','%s')",$conex->real_escape_string($fecha_cita),$conex->real_escape_string($hora_cita),$conex->real_escape_string($servicio),$conex->real_escape_string('En espera de confirmación'),$conex->real_escape_string($paciente_id));
+        $sentencia=sprintf("INSERT INTO citas (FECHA_RESERVA, FECHA_CITA, HORA_CITA, SERVICIO, ESTADO, PACIENTE_ID, PERSONAL_SOLICITADO_ID) values (CURDATE(),'%s','%s','%s','%s','%s','%s')",$conex->real_escape_string($fecha_cita),$conex->real_escape_string($hora_cita),$conex->real_escape_string($servicio),$conex->real_escape_string('En espera de confirmación'),$conex->real_escape_string($paciente_id),$conex->real_escape_string($profesional_id));
         $result= mysqli_query($conex, $sentencia);
         return $result;
 
@@ -66,10 +66,28 @@ class cita{
         return $result;
     }
 
-    public function cargarPorCita($cita_id){
+    /* public function cargarPorCita($cita_id){
         $conex = new DBConexion();
         $conex = $conex->Conectar();
         $sentencia = sprintf("SELECT * FROM citas WHERE ID = " . $cita_id);
+        $result = mysqli_query($conex, $sentencia);
+        return $result;
+    } */
+
+    public function cargarPorCita($cita_id) {
+        $conex = new DBConexion();
+        $conex = $conex->Conectar();
+    
+        $sentencia = sprintf("
+            SELECT 
+                c.*, 
+                CONCAT(p_solicitado.NOMBRES, ' ', p_solicitado.APELLIDOS) AS prof_solicitado,
+                CONCAT(p_asignado.NOMBRES, ' ', p_asignado.APELLIDOS) AS prof_asignado
+            FROM citas c
+            LEFT JOIN personal p_solicitado ON c.PERSONAL_SOLICITADO_ID = p_solicitado.ID
+            LEFT JOIN personal p_asignado ON c.PERSONAL_ID = p_asignado.ID
+            WHERE c.ID = %s", $cita_id);
+    
         $result = mysqli_query($conex, $sentencia);
         return $result;
     }

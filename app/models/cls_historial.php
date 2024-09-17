@@ -19,21 +19,29 @@ class historial{
     public function cargarPorPaciente($paciente_id){
         $conex = new DBConexion();
         $conex = $conex->Conectar();
-        $sentencia = sprintf("SELECT historial.*, paciente.NOMBRES, paciente.APELLIDOS
-                                FROM historial
-                                INNER JOIN paciente ON historial.PACIENTE_ID = paciente.ID 
-                                WHERE PACIENTE_ID = " . $paciente_id);
+    
+        $sentencia = sprintf("
+            SELECT 
+                historial.*, 
+                CONCAT(paciente.NOMBRES, ' ', paciente.APELLIDOS) AS paciente_nombre,
+                CONCAT(personal.NOMBRES, ' ', personal.APELLIDOS) AS profesional_nombre
+            FROM historial
+            INNER JOIN paciente ON historial.PACIENTE_ID = paciente.ID
+            LEFT JOIN personal ON historial.PROFESIONAL_ID = personal.ID
+            WHERE historial.PACIENTE_ID = %s", $paciente_id);
+    
         $result = mysqli_query($conex, $sentencia);
         return $result;
     }
 
-    public function nuevoHistorial($diagnostico, $recomendacion, $paciente_id){
+    public function nuevoHistorial($diagnostico, $recomendacion, $paciente_id, $resultados, $servicio, $profesional_id){
 
         $conex=new DBConexion();
         $conex=$conex ->Conectar();
-        $sentencia=sprintf("INSERT INTO historial (FECHA, DIAGNOSTICO, RECOMENDACION, PACIENTE_ID) values (CURDATE(),'%s','%s','%s')",
+        $sentencia=sprintf("INSERT INTO historial (FECHA, DIAGNOSTICO, RECOMENDACION, PACIENTE_ID, RESULTADOS, SERVICIO, PROFESIONAL_ID) values (CURDATE(),'%s','%s','%s','%s','%s','%s')",
         $conex->real_escape_string($diagnostico),$conex->real_escape_string($recomendacion),
-        $conex->real_escape_string($paciente_id));
+        $conex->real_escape_string($paciente_id), $conex->real_escape_string($resultados), $conex->real_escape_string($servicio),
+        $conex->real_escape_string($profesional_id));
         $result= mysqli_query($conex, $sentencia);
         return $result;
 

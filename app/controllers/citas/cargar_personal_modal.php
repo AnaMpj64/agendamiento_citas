@@ -3,6 +3,8 @@ require_once("../../models/cls_personal.php");
 $personal = new personal();
 $result = $personal->cargarTodoPersonal();
 
+echo "<option value=''>Seleccionar profesional</option>";
+
 if (mysqli_num_rows($result) > 0) {
 
     while ($row = mysqli_fetch_array($result)) {

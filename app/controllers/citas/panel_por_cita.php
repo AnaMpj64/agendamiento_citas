@@ -52,6 +52,8 @@ if (mysqli_num_rows($result) > 0) {
                         <p>CI: " . $pac['CEDULA'] . "</p>
                         <p>Fecha de nacimiento: " . $pac['FECHA_NACIMIENTO'] . "</p>
                         <p>Telf: " . $pac['TELEFONO'] . "</p>
+                        <p>Profesional Solicitado: <strong>" . $row['prof_solicitado'] . "</strong></p>
+                        <p>Profesional Asignado: <strong><em>" . $row['prof_asignado'] . "</em></strong></p>
                     </div>
                     <div class='panel-footer'>".
                     $buttonCancel.

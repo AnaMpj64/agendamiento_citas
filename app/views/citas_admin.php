@@ -48,7 +48,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="../controllers/citas/agendar_cita.php" method="post">
+                <form action="../controllers/citas/agendar_cita.php" method="post" id="form-agendar-cita">
                     <div class="mb-3">
                         <label class="form-label">Fecha de la Cita:</label>
                         <input type="text" class="form-control" id="txt_fecha_cita" name="txt_fecha_cita" readonly>
@@ -73,11 +73,12 @@
                            
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Agendar</button>
+                    <button type="submit" class="btn btn-success">Agendar</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" id="marcarNoLaborable">Marcar hora como no laborable</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -109,3 +110,54 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Detectar el clic en el botón "Marcar hora como no laborable"
+    document.getElementById('marcarNoLaborable').addEventListener('click', function() {
+        var fecha = document.getElementById('txt_fecha_cita').value;
+        var hora = document.getElementById('txt_hora_cita').value;
+
+        // Mostrar una alerta de confirmación antes de proceder
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Estás a punto de marcar esta hora como no laborable. No se podrán agendar citas a esta hora.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, marcar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            // Si el usuario confirma, se continúa con el proceso
+            if (result.isConfirmed) {
+                // Hacer una solicitud AJAX
+                $.ajax({
+                    url: '../controllers/horarios/marcar_no_laborable.php',
+                    type: 'POST',
+                    data: {
+                        txt_fecha_cita: fecha,
+                        txt_hora_cita: hora
+                    },
+                    success: function(response) {
+                        // Mostrar modal con el mensaje de éxito
+                        Swal.fire({
+                            title: 'Éxito',
+                            text: 'Hora marcada como no laborable correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar'
+                        }).then(function() {
+                            location.reload();  // Recargar la página después de aceptar el modal
+                        });
+                    },
+                    error: function() {
+                        // Mostrar modal de error
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Hubo un problema al marcar la hora como no laborable.',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>

@@ -29,23 +29,38 @@ class PasswordReset {
     public function obtenerUsuarioID($correo) {
         $conex = new DBConexion();
         $conexion = $conex->Conectar();
-
-        $sentencia = sprintf(
-            "SELECT ID FROM usuarios 
-            WHERE ID IN (SELECT PACIENTE_ID FROM paciente WHERE CORREO = '%s'
-                         UNION 
-                         SELECT PERSONAL_ID FROM personal WHERE CORREO = '%s')",
-            $correo, $correo
+    
+        // Consulta para buscar el ID de usuario basado en paciente o personal
+        $sentenciaPaciente = sprintf(
+            "SELECT u.ID FROM usuarios u
+            INNER JOIN paciente p ON u.PACIENTE_ID = p.ID
+            WHERE p.CORREO = '%s'",
+            $correo
         );
-
-        $result = mysqli_query($conexion, $sentencia);
-
-        if (mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            return $row['ID'];
-        } else {
-            return null;
+    
+        $sentenciaPersonal = sprintf(
+            "SELECT u.ID FROM usuarios u
+            INNER JOIN personal per ON u.PERSONAL_ID = per.ID
+            WHERE per.CORREO = '%s'",
+            $correo
+        );
+    
+        // Primero buscamos en la tabla de pacientes
+        $resultPaciente = mysqli_query($conexion, $sentenciaPaciente);
+        if (mysqli_num_rows($resultPaciente) > 0) {
+            $rowPaciente = mysqli_fetch_assoc($resultPaciente);
+            return $rowPaciente['ID'];
         }
+    
+        // Si no se encontró en paciente, buscamos en la tabla de personal
+        $resultPersonal = mysqli_query($conexion, $sentenciaPersonal);
+        if (mysqli_num_rows($resultPersonal) > 0) {
+            $rowPersonal = mysqli_fetch_assoc($resultPersonal);
+            return $rowPersonal['ID'];
+        }
+    
+        // Si no se encuentra en ninguna tabla, retornamos null
+        return null;
     }
 
     // Nueva función para guardar el código en la tabla recuperacion_pass

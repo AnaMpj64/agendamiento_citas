@@ -66,10 +66,7 @@
           <h4 class="title">
             Actualización de historial del paciente
           </h4>
-          <button type="button" class="close waves-effect waves-light" data-dismiss="modal"
-            aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="close waves-effect waves-light" data-bs-dismiss="modal" aria-label="Close">X</button>
         </div>
         <div class="modal-body">
           <input type="hidden" id="paciente_id" name="paciente_id"> <!-- ID del paciente -->

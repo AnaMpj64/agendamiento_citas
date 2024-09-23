@@ -128,9 +128,7 @@ $row = mysqli_fetch_array($result);
           <h4 class="title">
             Actualización de datos
           </h4>
-          <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="close waves-effect waves-light" data-bs-dismiss="modal" aria-label="Close">X</button>
         </div>
         <div class="modal-body">
           <div class="md-form form-lg mt-2">

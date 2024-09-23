@@ -133,9 +133,9 @@ class login{
             $mail->isHTML(true);
             $mail->Subject = 'Intentos fallidos de inicio de sesión';
             $mail->Body    = "Estimado(a) $nombre,<br><br>
-                              Alguien está intentando acceder a su cuenta. Si no ha sido usted, puede cambiar su contraseña aquí: <a href='http://enlace-a-cambio-de-contrasena.com'>Cambiar contraseña</a>.<br><br>
+                              Alguien está intentando acceder a su cuenta. Si no ha sido usted, puede cambiar su contraseña aquí: <a href='https://polar-peak-18328-c36e0d7c1501.herokuapp.com/app/views/password_reset.php'>Cambiar contraseña</a>.<br><br>
                               Gracias por su atención.";
-            $mail->AltBody = "Estimado(a) $nombre, Alguien ha intentado acceder a su cuenta. Si no ha sido usted, puede cambiar su contraseña aquí: http://enlace-a-cambio-de-contrasena.com";
+            $mail->AltBody = "Estimado(a) $nombre, Alguien ha intentado acceder a su cuenta. Si no ha sido usted, puede cambiar su contraseña aquí: https://polar-peak-18328-c36e0d7c1501.herokuapp.com/app/views/password_reset.php";
 
             $mail->send();
         } catch (Exception $e) {

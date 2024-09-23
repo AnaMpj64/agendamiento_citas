@@ -93,7 +93,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="../controllers/citas/confirmar_cita.php" method="post">       
+                <form action="" method="post">       
                     <input type="hidden" class="form-control" id="cita_id_txt" name="cita_id_txt" readonly>         
                     <div class="mb-3">
                         <label class="form-label">Escoja un profesional para atender la cita:</label>

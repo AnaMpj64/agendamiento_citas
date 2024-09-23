@@ -22,14 +22,25 @@ class cita{
         $this->paciente_id="";
     }
 
-    public function agendar($fecha_cita, $hora_cita, $servicio, $paciente_id, $profesional_id){
-
-        $conex=new DBConexion();
-        $conex=$conex ->Conectar();
-        $sentencia=sprintf("INSERT INTO citas (FECHA_RESERVA, FECHA_CITA, HORA_CITA, SERVICIO, ESTADO, PACIENTE_ID, PERSONAL_SOLICITADO_ID) values (CURDATE(),'%s','%s','%s','%s','%s','%s')",$conex->real_escape_string($fecha_cita),$conex->real_escape_string($hora_cita),$conex->real_escape_string($servicio),$conex->real_escape_string('En espera de confirmación'),$conex->real_escape_string($paciente_id),$conex->real_escape_string($profesional_id));
-        $result= mysqli_query($conex, $sentencia);
+    public function agendar($fecha_cita, $hora_cita, $servicio, $paciente_id, $profesional_id) {
+        $conex = new DBConexion();
+        $conex = $conex->Conectar();
+    
+        $profesional_id_sql = is_null($profesional_id) ? 'NULL' : "'".$conex->real_escape_string($profesional_id)."'";
+    
+        $sentencia = sprintf(
+            "INSERT INTO citas (FECHA_RESERVA, FECHA_CITA, HORA_CITA, SERVICIO, ESTADO, PACIENTE_ID, PERSONAL_SOLICITADO_ID) 
+            VALUES (CURDATE(), '%s', '%s', '%s', '%s', '%s', %s)",
+            $conex->real_escape_string($fecha_cita),
+            $conex->real_escape_string($hora_cita),
+            $conex->real_escape_string($servicio),
+            $conex->real_escape_string('En espera de confirmación'),
+            $conex->real_escape_string($paciente_id),
+            $profesional_id_sql 
+        );
+    
+        $result = mysqli_query($conex, $sentencia);
         return $result;
-
     }
 
     public function cargarCitas(){

@@ -19,6 +19,8 @@ class ejercicio{
         $this->usuarios_id="";
     }
 
+
+
     public function agregarEjercicio($nombre, $descripcion, $imagen, $contraindicacion, $usuario) {
         $conex = new DBConexion();
         $conexion = $conex->Conectar();
@@ -42,6 +44,8 @@ class ejercicio{
         
         return $result;
     }
+
+    
 
     public function cargarEjercicios($parametro){
 

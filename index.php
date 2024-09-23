@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="public/img/logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Achilie Fisioterapeuta</title>
     <!-- BOXICONS -->
     <link href='public/lib/boxicons/css/boxicons.min.css' rel='stylesheet'>
@@ -48,7 +49,7 @@
                             <!--<i class="bx bx-lock-alt icon"></i> -->
                         </div>
                         <div class="forgot-pass">
-                            <a href="#">Olvidé la contraseña</a>
+                            <a href="app/views/password_reset.php">Olvidé la contraseña</a>
                         </div>
                         <div class="input-box">
                             <button type="submit" class="input-submit">
@@ -69,24 +70,28 @@
                     <span>Crear cuenta</span>
                 </div>
                 <div class="form-inputs">
-                    <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Correo" required>
-                        <i class="bx bx-envelope icon"></i>
-                    </div>
-                    <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Usuario" required>
-                        <i class="bx bx-user icon"></i>
-                    </div>
-                    <div class="input-box">
-                        <input type="password" class="input-field" placeholder="Contraseña" required>
-                        <!--<i class="bx bx-lock-alt icon"></i> -->
-                    </div>
-                    <div class="input-box">
-                        <button class="input-submit">
-                            <span>Registrarse</span>
-                            <i class="bx bx-right-arrow-alt"></i>
-                        </button>
-                    </div>
+                    <form id="registerForm">
+                        <div class="input-box">
+                            <input type="text" class="input-field" id="email" name="email" placeholder="Correo" required>
+                            <i class="bx bx-envelope icon"></i>
+                        </div>
+                        <div class="input-box">
+                            <!-- Cambiar id de "user" a "registerUser" -->
+                            <input type="text" class="input-field" id="registerUser" name="user" placeholder="Usuario" required>
+                            <i class="bx bx-user icon"></i>
+                        </div>
+                        <div class="input-box">
+                            <input type="password" class="input-field" id="password" name="password" placeholder="Contraseña" required>
+                            <span id="passwordError"></span>
+                            <!--<i class="bx bx-lock-alt icon"></i> -->
+                        </div>
+                        <div class="input-box">
+                            <button type="submit" class="input-submit">
+                                <span>Registrarse</span>
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 <div class="social-login">
                     <i class="bx bxl-whatsapp"></i>

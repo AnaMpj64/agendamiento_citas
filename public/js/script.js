@@ -72,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
           var horaActual = ahora.getHours();
           var minutosActuales = ahora.getMinutes();
 
-          if (fechaSeleccionada < fechaActual || (fechaSeleccionada === fechaActual && (horaSeleccionada < horaActual || (horaSeleccionada == horaActual && minutosActuales < minutosActuales)))) {
+          if (fechaSeleccionada < fechaActual || (fechaSeleccionada === fechaActual && 
+            (horaSeleccionada < horaActual || (horaSeleccionada == horaActual && minutosActuales < minutosActuales)))) {
               Swal.fire({
                   title: 'No se puede agendar en una fecha u hora anterior a la actual.',
                   icon: 'error',
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // Verificar si la hora está dentro de las horas laborales
           if (
-              (info.date.getDay() >= 1 && info.date.getDay() <= 5 && ((horaSeleccionada >= '08:00' && horaSeleccionada < '13:00') || (horaSeleccionada >= '14:01' && horaSeleccionada <= '18:00'))) ||
+              (info.date.getDay() >= 1 && info.date.getDay() <= 5 && ((horaSeleccionada >= '08:00' && horaSeleccionada < '12:59') || (horaSeleccionada >= '14:01' && horaSeleccionada <= '18:00'))) ||
               (info.date.getDay() === 6 && (horaSeleccionada >= '09:00' && horaSeleccionada < '13:00'))
           ) {
               document.getElementById('txt_fecha_cita').value = fechaSeleccionada;
@@ -524,35 +525,49 @@ function cancelarCitaPaciente(idCita, idPaciente) {
 }
 
 function cancelarCitaAdmin(idCita) {
-  Swal.fire({
-    title: '¿Está seguro que desea cancelar esta cita?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, cancelar',
-    cancelButtonText: 'No, mantener cita',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      var fd = new FormData();
-      fd.append('id', idCita);
-      $.ajax({
-        type: 'POST',
-        url: '../../app/controllers/citas/cancelar_cita.php',
-        data: fd,
-        cache: false,
-        contentType: false,
-        processData: false,
-      })
+    Swal.fire({
+      title: '¿Está seguro que desea cancelar esta cita?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cancelar',
+      cancelButtonText: 'No, mantener cita',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        var fd = new FormData();
+        fd.append('id', idCita);
+  
+        $.ajax({
+          type: 'POST',
+          url: '../../app/controllers/citas/cancelar_cita.php',
+          data: fd,
+          cache: false,
+          contentType: false,
+          processData: false,
+        })
         .done(function (data) {
-          Swal.fire({
-            title: 'Cita cancelada',
-            width: 600,
-            padding: '3em',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            window.location.href = '../../app/views/citas_admin.php';
-          });
+          if (data.trim() === 'Correo enviado') {
+            Swal.fire({
+              title: 'Cita cancelada y correo enviado al paciente',
+              width: 600,
+              padding: '3em',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              window.location.href = '../../app/views/citas_admin.php';
+            });
+          } else {
+            Swal.fire({
+              title: 'Cita cancelada, pero no se pudo enviar el correo',
+              width: 600,
+              padding: '3em',
+              icon: 'warning',
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              /* window.location.href = '../../app/views/citas_admin.php'; */
+            });
+          }
         })
         .fail(function () {
           Swal.fire({
@@ -560,10 +575,11 @@ function cancelarCitaAdmin(idCita) {
             icon: 'error',
           });
         });
-    }
-  });
-  return false;
-}
+      }
+    });
+    return false;
+  }
+  
 
 function cerrarSesion() {
   window.location.href = '../../app/controllers/cerrar_sesion.php';
@@ -871,4 +887,43 @@ function buscarTabla() {
         }
     }
 }
+
+$(document).on('submit', '#asignamientoProfesionalModal', function(e) {
+    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
+    var formData = $(this).serialize(); // Obtener los datos del formulario
+
+    $.ajax({
+        url: '../../app/controllers/citas/confirmar_cita.php',
+        type: 'POST',
+        data: {
+            cita_id_txt: $('#cita_id_txt').val(),  // ID de la cita
+            txt_profesional: $('#txt_profesional').val()  // ID del profesional
+        },
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    title: 'Cita confirmada',
+                    text: 'Cita confirmada correctamente, se ha asignado un profesional.',
+                    icon: 'success'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: response.message,
+                    icon: 'error'
+                });
+            }
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al confirmar la cita.',
+                icon: 'error'
+            });
+        }
+    });
+});
 

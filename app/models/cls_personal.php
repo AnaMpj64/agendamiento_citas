@@ -34,5 +34,18 @@ class personal{
         return $result;
     }
 
+    public function cargarPorId($personal_id) {
+        $conex = new DBConexion();
+        $conex = $conex->Conectar();
+        $sentencia = sprintf("SELECT * FROM personal WHERE ID = %d", $personal_id);
+        $result = mysqli_query($conex, $sentencia);
+        
+        if (mysqli_num_rows($result) > 0) {
+            return mysqli_fetch_assoc($result); // Retorna el resultado como un array asociativo
+        } else {
+            return null; // Si no se encuentra, retorna null
+        }
+    }
+
 }
 ?>

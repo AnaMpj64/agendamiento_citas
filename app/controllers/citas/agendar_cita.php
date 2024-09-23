@@ -4,12 +4,15 @@
 <?php
 require_once('../../models/cls_cita.php');
 $objp= new cita();
+
+$profesional_id = isset($_POST['txt_profesional']) && !empty($_POST['txt_profesional']) ? $_POST['txt_profesional'] : null;
+
 $result=$objp->agendar(
     $_POST['txt_fecha_cita'],
     $_POST['txt_hora_cita'],
     $_POST['txt_servicio'],
     $_POST['txt_paciente_id'],
-    $_POST['txt_profesional']);
+    $profesional_id);
 if($result)
 {
     echo '<script>jQuery(function(){swal({
